@@ -1,7 +1,8 @@
 FROM maven:3.9.6-eclipse-temurin-22 AS builder
 WORKDIR /app
 COPY . .
-RUN mvn clean package -DskipTests
+# RUN mvn clean package -DskipTests
+RUN mvn clean verify
 
 FROM eclipse-temurin:22-jdk-alpine
 WORKDIR /app

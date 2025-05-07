@@ -19,15 +19,10 @@ jobs:
     # 2. Build Docker image
     - name: Build Docker image
       run: |
-        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/your-image-name:${{ github.sha }} .
-        echo "IMAGE_NAME=${{ secrets.DOCKER_HUB_USERNAME }}/your-image-name:${{ github.sha }}" >> $GITHUB_ENV
+        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/alotra:${{ github.sha }} .
+        echo "IMAGE_NAME=${{ secrets.DOCKER_HUB_USERNAME }}/alotra:${{ github.sha }}" >> $GITHUB_ENV
 
-    # 3. Run tests in Docker container (tuỳ chọn))
-    # - name: Run tests
-    #   run: |
-    #     docker run --rm your-image-name:${{ github.sha }} ./mvnw test
-
-    # 4. Push image to Docker Hub/GitHub Container Registry
+    # 3. Push image to Docker Hub/GitHub Container Registry
     - name: Login to Docker Hub
       if: success()
       uses: docker/login-action@v2
