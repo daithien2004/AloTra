@@ -19,8 +19,8 @@ jobs:
     # 2. Build Docker image
     - name: Build Docker image
       run: |
-        docker build -t your-image-name:${{ github.sha }} .
-        echo "IMAGE_NAME=your-image-name:${{ github.sha }}" >> $GITHUB_ENV
+        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/your-image-name:${{ github.sha }} .
+        echo "IMAGE_NAME=${{ secrets.DOCKER_HUB_USERNAME }}/your-image-name:${{ github.sha }}" >> $GITHUB_ENV
 
     # 3. Run tests in Docker container (tuỳ chọn))
     # - name: Run tests
