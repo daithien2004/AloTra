@@ -33,12 +33,14 @@ jobs:
     - name: Push Docker image
       run: docker push ${{ env.IMAGE_NAME }}
 
+    # Thông báo lên Discord khi PR được merge
     - name: Notify Discord
       run: |
         curl -X POST -H "Content-Type: application/json" \
         -d '{"content": "🎉 PR đã merge, issue có thể được đóng!"}' \
         ${{ secrets.DISCORD_WEBHOOK }}
 
+    # Di chuyển Jira issue sang trạng thái Done (Hoàn thành)
     - name: Move Jira issue to Done
       env:
         JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
@@ -82,6 +84,7 @@ jobs:
           echo "issue_keys=$ISSUE_KEYS" >> $GITHUB_OUTPUT
         fi
 
+    # Di chuyển Jira issue sang trạng thái In Progress (Đang xử lý)
     - name: Move Jira issues to In Progress
       if: steps.check-commit.outputs.found == 'true'
       env:
