@@ -18,7 +18,7 @@ public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int orderID;
-	@Column(columnDefinition = "nvarchar(max)")
+	@Column(name = "shipAddress", columnDefinition = "TEXT")
 	private String shipAddress;
 		
 	@ManyToOne

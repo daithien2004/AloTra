@@ -28,20 +28,19 @@ public class Branch {
     @JoinColumn(name = "UserID", referencedColumnName = "userID")
     private User user;
     
-    
-    @Column(columnDefinition = "nvarchar(max)")
+    @Column(columnDefinition = "TEXT")
     private String branchName;
-    
+
     @Column(name = "Images")
     private String images;
 
-    @Column(name = "Address", columnDefinition = "nvarchar(max)")
+    @Column(name = "Address", columnDefinition = "TEXT")
     private String address;
 
-    @Column(name = "Description", columnDefinition = "nvarchar(max)")
+    @Column(name = "Description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "Introduction", columnDefinition = "nvarchar(255)")
+    @Column(name = "Introduction", columnDefinition = "VARCHAR(255)")
     private String introduction;
     
     @Column(name = "OpenTime")

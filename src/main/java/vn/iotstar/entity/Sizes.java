@@ -17,14 +17,13 @@ public class Sizes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int sizeID;
 
-    @Column(name = "SizeName", nullable = false, columnDefinition = "nvarchar(max)")
+    @Column(name = "SizeName", nullable = false, columnDefinition = "VARCHAR(255)") // sửa tại đây
     private String sizeName;
 
     @Column(name = "ExtraCost", nullable = false, precision = 18, scale = 2)
     private BigDecimal extraCost;
 
-    // Quan hệ 1-1 với CartMilkTea
     @OneToOne(mappedBy = "size", cascade = CascadeType.ALL)
     private CartMilkTea cartMilkTea;
-
 }
+

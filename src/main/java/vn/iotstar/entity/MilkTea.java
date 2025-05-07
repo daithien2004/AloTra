@@ -25,7 +25,7 @@ public class MilkTea {
     @ManyToMany(mappedBy = "milkTeas")  // mappedBy tương ứng với trường trong Branch
     private List<Branch> branches;  // Mối quan hệ N:M với Branch
 
-    @Column(name = "MilkTeaName", columnDefinition = "nvarchar(255)")
+    @Column(name = "MilkTeaName", columnDefinition = "VARCHAR(255)")
     private String milkTeaName;
 
     @Column(name = "Image")
@@ -37,10 +37,10 @@ public class MilkTea {
     @Column(name = "DiscountPrice")
     private BigDecimal discountPrice;
 
-    @Column(name = "Description", columnDefinition = "nvarchar(max)")
+    @Column(name = "Description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(columnDefinition = "nvarchar(max)")
+    @Column(columnDefinition = "TEXT")
     private String introduction;
     
     @Transient

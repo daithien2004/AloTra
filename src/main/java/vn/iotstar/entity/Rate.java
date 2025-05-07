@@ -26,7 +26,7 @@ public class Rate {
     @JoinColumn(name = "MilkTeaID", referencedColumnName = "milkTeaID")
     private MilkTea milkTea;
 
-    @Column(name = "Comment", columnDefinition = "nvarchar(max)")
+    @Column(name = "Comment", columnDefinition = "TEXT") // ✅ Sửa tại đây
     private String comment;
     
     @Column(name = "PostTime")
@@ -43,6 +43,5 @@ public class Rate {
                 ", rating=" + rateValue +
                 '}';
     }
-
 }
 
