@@ -68,37 +68,37 @@ jobs:
           echo "❌ Không tìm thấy issue key trong tiêu đề PR"
         fi
 
-    handle_ci_pipeline:
-      runs-on: ubuntu-latest
-      if: github.event_name == 'push'
-      steps:
-      - name: Check commits for CI Pipeline
-        id: check-commit
-        env:
-          COMMITS_JSON: ${{ toJSON(github.event.commits) }}
-        run: |
-          echo "$COMMITS_JSON" > commits.json
-          ISSUE_KEYS=$(jq -r '.[] | select(.message | test("CI Pipeline"; "i")) | .message | match("AL-[0-9]+") | .string' commits.json | sort | uniq | tr '\n' ' ')
-          
-          if [ -z "$ISSUE_KEYS" ]; then
-            echo "found=false" >> $GITHUB_OUTPUT
-          else
-            echo "found=true" >> $GITHUB_OUTPUT
-            echo "issue_keys=$ISSUE_KEYS" >> $GITHUB_OUTPUT
-          fi
+  handle_ci_pipeline:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+    - name: Check commits for CI Pipeline
+      id: check-commit
+      env:
+        COMMITS_JSON: ${{ toJSON(github.event.commits) }}
+      run: |
+        echo "$COMMITS_JSON" > commits.json
+        ISSUE_KEYS=$(jq -r '.[] | select(.message | test("CI Pipeline"; "i")) | .message | match("AL-[0-9]+") | .string' commits.json | sort | uniq | tr '\n' ' ')
+        
+        if [ -z "$ISSUE_KEYS" ]; then
+          echo "found=false" >> $GITHUB_OUTPUT
+        else
+          echo "found=true" >> $GITHUB_OUTPUT
+          echo "issue_keys=$ISSUE_KEYS" >> $GITHUB_OUTPUT
+        fi
 
-      - name: Move Jira issues to In Progress
-        if: steps.check-commit.outputs.found == 'true'
-        env:
-          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
-          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-          JIRA_DOMAIN: ${{ secrets.JIRA_URL }}
-        run: |
-          for KEY in ${{ steps.check-commit.outputs.issue_keys }}; do
-            echo "🔄 Chuyển issue $KEY sang In Progress"
-            curl -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
-              -X POST \
-              -H "Content-Type: application/json" \
-              --data '{"transition":{"id":"21"}}' \
-              "https://$JIRA_DOMAIN/rest/api/3/issue/$KEY/transitions"
-          done
+    - name: Move Jira issues to In Progress
+      if: steps.check-commit.outputs.found == 'true'
+      env:
+        JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        JIRA_DOMAIN: ${{ secrets.JIRA_URL }}
+      run: |
+        for KEY in ${{ steps.check-commit.outputs.issue_keys }}; do
+          echo "🔄 Chuyển issue $KEY sang In Progress"
+          curl -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
+            -X POST \
+            -H "Content-Type: application/json" \
+            --data '{"transition":{"id":"21"}}' \
+            "https://$JIRA_DOMAIN/rest/api/3/issue/$KEY/transitions"
+        done
