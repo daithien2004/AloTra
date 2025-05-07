@@ -1,0 +1,38 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  handle_pr:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Notify Discord
+      run: |
+        curl -X POST -H "Content-Type: application/json" \
+        -d '{"content": "🎉 PR đã merge, issue có thể được đóng!"}' \
+        ${{ secrets.DISCORD_WEBHOOK }}
+
+    - name: Move Jira issue to Done
+      env:
+        JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        JIRA_DOMAIN: ${{ secrets.JIRA_URL }}
+      run: |
+        ISSUE_KEY=$(echo "${{ github.event.pull_request.title }}" | grep -o 'AL-[0-9]\+')
+        echo "Found issue: $ISSUE_KEY"
+        if [ -n "$ISSUE_KEY" ]; then
+          curl -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
+            -X POST \
+            -H "Content-Type: application/json" \
+            --data '{"transition":{"id":"31"}}' \
+            https://$JIRA_DOMAIN/rest/api/3/issue/$ISSUE_KEY/transitions
+        else
+          echo "❌ Không tìm thấy issue key trong tiêu đề PR"
+        fi
