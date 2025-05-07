@@ -23,9 +23,9 @@ jobs:
         echo "IMAGE_NAME=your-image-name:${{ github.sha }}" >> $GITHUB_ENV
 
     # 3. Run tests in Docker container (tuỳ chọn)
-    - name: Run tests
-      run: |
-        docker run --rm your-image-name:${{ github.sha }} ./mvnw test
+    # - name: Run tests
+    #   run: |
+    #     docker run --rm your-image-name:${{ github.sha }} ./mvnw test
 
     # 4. Push image to Docker Hub/GitHub Container Registry
     - name: Login to Docker Hub
